@@ -1,9 +1,89 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+body {
+  font-family: "Sanchez", Verdana, Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  background: url("/images/moroccan-flower-dark.png"), #6F4A38;
+  background-repeat: repeat;
 }
+
+#webheader {
+  font-size: 25px;
+  background: url("/images/moroccan-flower.png");
+  text-align: center;
+  margin: 0 auto;
+  max-width: 1000px;
+  height: 100px;
+  border: 2px solid black;
+  opacity: 0.9;
+  margin-top: 20px;
+  position: relative;
+  margin-bottom: 20px;
+  vertical-align: middle;
+}
+
+#webheader a:first-of-type img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 80px;
+  padding: 10px;
+}
+
+#webheader a:last-of-type img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 80px;
+  padding: 10px;
+}
+
+
+#content {
+  margin: 0 auto;
+  max-width: 1000px;
+  background: url("/images/moroccan-flower.png");
+  text-align: center;
+  height: 100%;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  border: 2px solid black;
+}
+
+#about-me {
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 2px solid #FFCB05;
+    background: #00274C;
+    color: #FFCB05;
+
+}
+
+#projects {
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 2px solid #FFCB05;
+    background: #00274C;
+    color: #FFCB05;
+
+}
+
+#jobs {
+    margin-top: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 2px solid #FFCB05;
+    background: #00274C;
+    color: #FFCB05;
+
+}
+
 
 #greeting-container {
   margin-top: 20px;
 }
+#fact-container {
+  margin-top: 20px;
+}
+
+
