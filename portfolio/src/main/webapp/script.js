@@ -19,7 +19,7 @@ function addRandomRecommendation() {
   const recommendations =
       ['The Stand', '11/22/63', '\'Salem\'s Lot', 'Carrie', 'Cell', 'Cujo', 'The Dark Tower', 'The Shining', 'Revival', 'Needful Things', 'Mr. Mercedes', 'Misery'];
 
-  // Pick a random greeting.
+  // Pick a random recommendation.
   const recommendation = recommendations[Math.floor(Math.random() * recommendations.length)];
 
   // Add it to the page.
