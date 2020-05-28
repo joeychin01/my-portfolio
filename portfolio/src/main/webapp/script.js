@@ -13,16 +13,16 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random book recommendation to the page.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addRandomRecommendation() {
+  const recommendations =
+      ['The Stand', '11/22/63', '\'Salem\'s Lot', 'Carrie', 'Cell', 'Cujo', 'The Dark Tower', 'The Shining', 'Revival', 'Needful Things', 'Mr. Mercedes', 'Misery'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  // Pick a random recommendation.
+  const recommendation = recommendations[Math.floor(Math.random() * recommendations.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const recommendationContainer = document.getElementById('recommendation-container');
+  recommendationContainer.innerText = recommendation;
 }

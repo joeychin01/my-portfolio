@@ -2,17 +2,65 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Joey's Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+
+  <body> 
+    <div id="webheader">
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="/images/my_face.jpeg"></a>
+      <h1>Joseph Chinoski's Portfolio</h1>
+      <a href="https://www.linkedin.com/in/joseph-chinoski/"><img src="/images/LinkedIn-Logo.png"></a>
+    </div>
+
     <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+      <h1>Welcome to my portfolio!</h1>
+      <div class="header">
+        <h2>About me</h2>
+      </div>
+
+      <div class = "content">
+        <p>
+          My name is Joseph Chinoski, and I am a rising junior at The University of Michigan (Go Blue!).
+          At UMich, I am a Computer Science Major in the College of Engineering.
+          Besides coding, I play tennis, read books (especially Stephen King), and play the violin!
+            
+        </p>
+      </div>
+
+      <div class="header">
+        <h2>Experiences</h2>
+      </div>
+
+      <div class = "content">
+        <p>
+          Over the Coronavirus summer, I am working as a STEP intern at Google, where I am working in a pod 
+          of three people to complete a capstone web development project.
+        </p>
+        <p>
+          Over the summer in 2019, I participated in CSSI, a Google coding camp that is intended for incoming College 
+          freshmen to learn what it is like to be a software developer, as well as to learn some coding skills revolving 
+          around web development.
+        </p>
+      </div>
+
+      <div class="header">
+        <h2>Projects</h2>
+      </div>
+
+
+      <div class = "content">
+        <p>
+          At CSSI I worked in a group of three in order to build a website to help in daily life.
+          Through that project, my group built the website lyric-giraffe.appspot.com, a website that 
+          displays lyrics to songs, either through directly searching, or by connecting to a user's 
+         Spotify account.
+        </p>
+      </div>
+
+      <button onclick="addRandomRecommendation()">Click Here for a random Stephen King Book</button>
+      <div id="recommendation-container"></div>
     </div>
   </body>
 </html>
