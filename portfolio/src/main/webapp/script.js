@@ -28,7 +28,9 @@ function addRandomRecommendation() {
 }
 
 function getMessage() {
-    fetch('/data').then(response => response.text()).then((message) => {
-        document.getElementById('message-container').innerText = message;
+    fetch('/messages')
+    .then(response => response.json())
+    .then((message) => {
+      document.getElementById('message-container').innerText = message[0];
     });
 }

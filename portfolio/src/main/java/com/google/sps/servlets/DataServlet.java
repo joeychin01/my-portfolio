@@ -19,15 +19,42 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
+@WebServlet("/messages")
 public class DataServlet extends HttpServlet {
 
+  private List<String> messages;
+
+  @Override
+  public void init() {
+    messages = new ArrayList<>();
+    /*messages.add("{\"name\": \"Joey\", \"height\": \"6\"}");
+    messages.add("{\"name\": \"Matthew\", \"height\": \"6\"}");
+    messages.add("{\"name\": \"Henny\", \"height\": \"6\"}");*/
+    messages.add("message1");
+    messages.add("message2");
+    messages.add("message3");
+  }
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Gson gson = new Gson();
+    String json = gson.toJson(messages);
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
+  }
+/*
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html;");
     String message = "Hello Joey!";
     response.getWriter().println(message);
   }
+*/
 }
+
+
