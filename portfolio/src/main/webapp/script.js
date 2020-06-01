@@ -27,10 +27,12 @@ function addRandomRecommendation() {
   recommendationContainer.innerText = recommendation;
 }
 
-function getMessage() {
+function getMessages() {
+  // TODO: change to display all messages in the array
     fetch('/messages')
     .then(response => response.json())
     .then((message) => {
       document.getElementById('message-container').innerText = message[0];
     });
 }
+
