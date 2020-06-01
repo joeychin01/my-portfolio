@@ -27,12 +27,29 @@ function addRandomRecommendation() {
   recommendationContainer.innerText = recommendation;
 }
 
+//gets comments from datastore
 function getMessages() {
-  // TODO: change to display all messages in the array
-    fetch('/messages')
-    .then(response => response.json())
-    .then((message) => {
-      document.getElementById('message-container').innerText = message[0];
-    });
+  fetch('/messages').then(response => response.json()).then((comments) => {
+    const commentListElement = document.getElementById('comment-list');
+    comments.forEach((comment) => {
+      commentListElement.appendChild(createCommentElement(comment));
+    })
+  });
 }
 
+//TODO: fix formatting of comments
+function createCommentElement(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment';
+
+  const bodyElement = document.createElement('span');
+  bodyElement.innerText = comment.comment + "\n" + "\n";
+
+  const authorElement = document.createElement('span');
+  authorElement.innerText = comment.author + "\n";
+
+  
+  commentElement.appendChild(authorElement);
+  commentElement.appendChild(bodyElement);
+  return commentElement;
+}

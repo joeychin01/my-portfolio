@@ -7,7 +7,7 @@
     <script src="script.js"></script>
   </head>
 
-  <body> 
+  <body onload="getMessages()"> 
     <div id="webheader">
       <a href="/"><img src="/images/my_face.jpeg"></a>
       <h1>Joseph Chinoski's Portfolio</h1>
@@ -60,11 +60,22 @@
         </p>
       </div>
       
-      <button onclick="getMessage()">Click Here for a message</button>
-      <div id="message-container"></div>
-
       <button onclick="addRandomRecommendation()">Click Here for a random Stephen King Book</button>
       <div id="recommendation-container"></div>
+      <br></br>
+      <form action = "/messages" method="POST">
+
+      <p>Leave a comment:</p>
+        <input type="text" value="comment" name="comment-box">
+        <input type="text" value="your name" name="author-box">
+        <br/><br/>
+        <br/><br/>
+        <input type="submit" />
+      </form>
+      <br></br>
+
+      <button onclick="getMessages()">Click Here to display all the messages</button>
+      <ul id="comment-list"></ul>
     </div>
   </body>
 </html>
