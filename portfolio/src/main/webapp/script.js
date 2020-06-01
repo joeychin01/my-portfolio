@@ -26,3 +26,11 @@ function addRandomRecommendation() {
   const recommendationContainer = document.getElementById('recommendation-container');
   recommendationContainer.innerText = recommendation;
 }
+
+function getMessage() {
+    fetch('/messages')
+    .then(response => response.json())
+    .then((message) => {
+      document.getElementById('message-container').innerText = message[0];
+    });
+}
