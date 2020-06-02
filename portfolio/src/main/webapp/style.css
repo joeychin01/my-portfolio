@@ -49,20 +49,20 @@ body {
 }
 
 .header {
-    border: 2px solid #FFCB05;
-    background: #00274C;
-    color: #FFCB05;
-    margin-top: 20px;
-    margin-left: 10%;
-    margin-right: 10%;
+  border: 2px solid #FFCB05;
+  background: #00274C;
+  color: #FFCB05;
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
 
 }
 
 .content {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 15%;
-    margin-right: 15%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 #recommendation-container {
@@ -75,5 +75,13 @@ body {
 }
 
 #comment-list {
-  list-style-type: none;
+  list-style: none;
+  margin-right: 40px;
+}
+
+#delete-button {
+  background: #00274c;
+  border: none;
+  color: #00274c;
+  margin-left: 200 px;
 }

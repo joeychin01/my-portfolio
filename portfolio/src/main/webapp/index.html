@@ -7,7 +7,8 @@
     <script src="script.js"></script>
   </head>
 
-  <body onload="getMessages()"> 
+  <body onload = "getMessages()"> 
+    <button id = "delete-button" onclick="deleteEverything()">DELETE ALL COMMENTS</button>
     <div id="webheader">
       <a href="/"><img src="/images/my_face.jpeg"></a>
       <h1>Joseph Chinoski's Portfolio</h1>
@@ -64,14 +65,25 @@
       <div id="recommendation-container"></div>
       <br></br>
       <form action = "/messages" method="POST">
-
-      <p>Leave a comment:</p>
-        <input type="text" value="comment" name="comment-box">
-        <input type="text" value="your name" name="author-box">
-        <br/><br/>
+        <p>Leave a comment:</p>
+        <input type="text" placeholder="comment" name="comment-box">
+        <input type="text" placeholder="your name" name="author-box">
         <br/><br/>
         <input type="submit" />
       </form>
+        <br/><br/>
+        <p>Options:</p>
+        <p>Number of comments to display:</p>
+        <input type="number" id="num-comments" name="num-comments" min="1" max="100" value="5">
+        <br></br>
+        <select id="sort-selection" name="sort-selection">
+          <option value="time-decreasing">Newest first</option>
+          <option value="time-increasing">Oldest first</option>
+          <option value="author-az">By author (alphabetical a-z)</option>
+          <option value="author-za">By author (alphabetical z-a)</option>
+          
+          </select>
+        <button onclick="getMessages()">Apply options</button>
       <br></br>
       <ul id="comment-list"></ul>
     </div>
