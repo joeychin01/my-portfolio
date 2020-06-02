@@ -14,47 +14,63 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.gson.Gson;
+import com.google.sps.data.Comment;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import com.google.gson.Gson;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/messages")
 public class DataServlet extends HttpServlet {
-
-  private List<String> messages;
-
   @Override
-  public void init() {
-    messages = new ArrayList<>();
-    /*messages.add("{\"name\": \"Joey\", \"height\": \"6\"}");
-    messages.add("{\"name\": \"Matthew\", \"height\": \"6\"}");
-    messages.add("{\"name\": \"Henny\", \"height\": \"6\"}");*/
-    messages.add("message1");
-    messages.add("message2");
-    messages.add("message3");
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String title = request.getParameter("comment-box");
+    long timestamp = System.currentTimeMillis();
+    String author = request.getParameter("author-box");
+
+    Entity taskEntity = new Entity("Task");
+    taskEntity.setProperty("comment", title);
+    taskEntity.setProperty("timestamp", timestamp);
+    taskEntity.setProperty("author", author);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(taskEntity);
+
+    response.sendRedirect("/index.html");
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Comment> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      long id = entity.getKey().getId();
+      String title = (String) entity.getProperty("comment");
+      long timestamp = (long) entity.getProperty("timestamp");
+      String author = (String) entity.getProperty("author");
+      Comment comment = new Comment(id, title, timestamp, author);
+      comments.add(comment);
+    }
+
     Gson gson = new Gson();
-    String json = gson.toJson(messages);
+
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(gson.toJson(comments));
   }
-/*
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    String message = "Hello Joey!";
-    response.getWriter().println(message);
-  }
-*/
 }
 
 
