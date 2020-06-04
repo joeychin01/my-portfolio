@@ -30,69 +30,71 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-/** controls the comments and datastore */
+/** Servlet controls the comments and datastore */
 @WebServlet("/messages")
 public class DataServlet extends HttpServlet {
 
-  /** Adds a comment to datastore */
+  DatastoreService datastore;
+  /** Create DatastoreService object */
+  public void init() {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  }
+
+  /** Function adds a comment to datastore */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter("comment-box");
     long timestamp = System.currentTimeMillis();
     String author = request.getParameter("author-box");
+    String color = request.getParameter("favcolor");
+    if(author.length() == 0) {
+      author = "Anonymous";
+    }
     if(comment.length() > 0){
       Entity commentEntity = new Entity("Comment");
       commentEntity.setProperty("comment", comment);
       commentEntity.setProperty("timestamp", timestamp);
       commentEntity.setProperty("author", author);
-
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      commentEntity.setProperty("color", color);
       datastore.put(commentEntity);
     }
     response.sendRedirect("/index.html");
   }
 
-  /** returns list of comments */
+  /** Function Returns list of comments */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query;
+    Query query = new Query("Comment");
     String sort = request.getParameter("sort");
     if(sort.equals("time-decreasing")){
-      query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    }
-    else if(sort.equals("time-increasing")){
-      query = new Query("Comment").addSort("timestamp", SortDirection.ASCENDING);
-    }
-    else if(sort.equals("author-az")){
-      query = new Query("Comment").addSort("author", SortDirection.ASCENDING);
-    }
-    else if(sort.equals("author-za")){
-      query = new Query("Comment").addSort("author", SortDirection.DESCENDING);
-    }
-    else{
-      query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+      query.addSort("timestamp", SortDirection.DESCENDING);
+    } else if(sort.equals("time-increasing")) {
+      query.addSort("timestamp", SortDirection.ASCENDING);
+    } else if(sort.equals("author-az")) {
+      query.addSort("author", SortDirection.ASCENDING);
+    } else if(sort.equals("author-za")) {
+      query.addSort("author", SortDirection.DESCENDING);
+    } else {
+      query.addSort("timestamp", SortDirection.DESCENDING);
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     int numComments = Integer.parseInt(request.getParameter("num"));
-    int i = 1;
     List<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
-      if(i <= numComments) {
+      if(comments.size() <= numComments) {
         long id = entity.getKey().getId();
         String text = (String) entity.getProperty("comment");
         long timestamp = (long) entity.getProperty("timestamp");
         String author = (String) entity.getProperty("author");
-        Comment comment = new Comment(id, text, timestamp, author);
+        String color = (String) entity.getProperty("color");
+        Comment comment = new Comment(id, text, timestamp, author, color);
         comments.add(comment);
-        i++;
       }
     }
-
     Gson gson = new Gson();
-
     response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(gson.toJson(comments));
   }
 }

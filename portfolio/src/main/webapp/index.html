@@ -7,8 +7,8 @@
     <script src="script.js"></script>
   </head>
 
-  <body onload = "getMessages()"> 
-    <button id = "delete-button" onclick="deleteEverything()">DELETE ALL COMMENTS</button>
+  <body onload="getMessages()"> 
+    <button id = "delete-button">DELETE ALL COMMENTS</button>
     <div id="webheader">
       <a href="/"><img src="/images/my_face.jpeg"></a>
       <h1>Joseph Chinoski's Portfolio</h1>
@@ -69,6 +69,10 @@
         <input type="text" placeholder="comment" name="comment-box">
         <input type="text" placeholder="your name" name="author-box">
         <br/><br/>
+        <p>Choose a background color for your comment!</p>
+        <br></br>
+        <input type="color" id="favcolor" name="favcolor" value="#ffcb05">
+        <br></br>
         <input type="submit" />
       </form>
         <br/><br/>
@@ -81,8 +85,8 @@
           <option value="time-increasing">Oldest first</option>
           <option value="author-az">By author (alphabetical a-z)</option>
           <option value="author-za">By author (alphabetical z-a)</option>
-          
-          </select>
+        </select>
+        <br></br>
         <button onclick="getMessages()">Apply options</button>
       <br></br>
       <ul id="comment-list"></ul>

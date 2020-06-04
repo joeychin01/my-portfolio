@@ -29,7 +29,9 @@ function addRandomRecommendation() {
 
 /** get messages from datastore and display them */
 function getMessages() {
-  fetch('/messages?num='+document.getElementById("num-comments").value+'&sort='+document.getElementById("sort-selection").value).then(response => response.json()).then((comments) => {
+  var numComments = document.getElementById("num-comments").value;
+  var sortSelection = document.getElementById("sort-selection").value;
+  fetch('/messages?num='+numComments+'&sort='+sortSelection).then(response => response.json()).then((comments) => {
     const commentListElement = document.getElementById('comment-list');
     document.getElementById("comment-list").innerHTML = "";
     comments.forEach((comment) => {
@@ -42,7 +44,6 @@ function getMessages() {
 function createCommentElement(comment) {
   const commentElement = document.createElement('li');
   commentElement.className = 'comment';
-
   const bodyElement = document.createElement('span');
   bodyElement.innerText = comment.comment + "\n" + "\n";
 
@@ -51,6 +52,7 @@ function createCommentElement(comment) {
   
   commentElement.appendChild(authorElement);
   commentElement.appendChild(bodyElement);
+  commentElement.style.backgroundColor = comment.color;
   return commentElement;
 }
 
@@ -61,5 +63,4 @@ function deleteEverything(){
   fetch(request).then(response => response.json()).then(() => {
     getMessages();
   });
-  getMessages();
 }

@@ -31,18 +31,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.Key;
 
-
 /** deletes all comments in datastore */
 @WebServlet("/delete-data")
-public class DeleteData extends HttpServlet {
-  /** Adds a comment to datastore */
+public class DeleteDataServlet extends HttpServlet {
+
+  DatastoreService datastore;
+  /** Create DatastoreService object */
+  public void init() {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  }
+
+  /** Deletes all comments from datastore */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    
     List<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
       Key key = entity.getKey();
