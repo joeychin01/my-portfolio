@@ -35,15 +35,10 @@ import com.google.appengine.api.datastore.Key;
 @WebServlet("/delete-data")
 public class DeleteDataServlet extends HttpServlet {
 
-  DatastoreService datastore;
-  /** Create DatastoreService object */
-  public void init() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  }
-
   /** Deletes all comments from datastore */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     List<Comment> comments = new ArrayList<>();

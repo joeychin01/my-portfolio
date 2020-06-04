@@ -34,15 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/messages")
 public class DataServlet extends HttpServlet {
 
-  DatastoreService datastore;
-  /** Create DatastoreService object */
-  public void init() {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-  }
-
   /** Function adds a comment to datastore */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     String comment = request.getParameter("comment-box");
     long timestamp = System.currentTimeMillis();
     String author = request.getParameter("author-box");
