@@ -29,6 +29,7 @@ function addRandomRecommendation() {
 
 /** Get messages from datastore and display them */
 function getMessages() {
+  updateLogin();
   var numComments = document.getElementById("num-comments").value;
   var sortSelection = document.getElementById("sort-selection").value;
   fetch('/messages?num='+numComments+'&sort='+sortSelection).then(response => response.json()).then((comments) => {
@@ -69,5 +70,28 @@ function deleteEverything(){
   const request = new Request('/delete-data', {method: 'POST'});
   fetch(request).then(response => response.json()).then(() => {
     getMessages();
+  });
+}
+
+/** Updates page to show login/not login data */
+function updateLogin(){
+  fetch('/login').then(response => response.json()).then((input) => {
+    loginWelcome = document.getElementById("login-welcome");
+    loginLink = document.getElementById("login-link");
+    if(input.login == "true"){
+      console.log(input.userEmail + " " + input.logoutUrl);
+      loginWelcome.innerText = "Welcome " + input.userEmail;
+      loginLink.href = input.logoutUrl;
+      loginLink.innerText = "Logout here";
+      document.getElementById("comment-form").style.display = "block";
+      document.getElementById("comment-display").innerText = "Leave a comment:";
+    }
+    else{
+      loginWelcome.innerText = "Welcome!";
+      loginLink.href = input.loginUrl;
+      loginLink.innerText = "Login here";
+      document.getElementById("comment-form").style.display = "none";
+      document.getElementById("comment-display").innerText = "Please sign in to leave a comment";
+    }
   });
 }
