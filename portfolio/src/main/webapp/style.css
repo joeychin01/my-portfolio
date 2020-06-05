@@ -6,9 +6,9 @@ body {
 }
 
 #webheader {
-  border: 2px solid #FFCB05;
-  background: #00274C;
-  color: #FFCB05;
+  border: 2px solid #ffcb05;
+  background: #00274c;
+  color: #ffcb05;
   font-size: 25px;
   text-align: center;
   margin: 0 auto;
@@ -49,20 +49,20 @@ body {
 }
 
 .header {
-    border: 2px solid #FFCB05;
-    background: #00274C;
-    color: #FFCB05;
-    margin-top: 20px;
-    margin-left: 10%;
-    margin-right: 10%;
+  border: 2px solid #ffcb05;
+  background: #00274C;
+  color: #ffcb05;
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
 
 }
 
 .content {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 15%;
-    margin-right: 15%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 #recommendation-container {
@@ -75,5 +75,19 @@ body {
 }
 
 #comment-list {
-  list-style-type: none;
+  list-style: none;
+  margin-right: 40px;
+}
+
+#delete-button {
+  background: #00274c;
+  border: none;
+  color: #00274c;
+  margin-left: 200 px;
+}
+
+li {
+  border: 2px solid #00274C;
+  margin-bottom: 10px;
+  word-wrap: break-word;
 }

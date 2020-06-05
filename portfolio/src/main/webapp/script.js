@@ -27,29 +27,40 @@ function addRandomRecommendation() {
   recommendationContainer.innerText = recommendation;
 }
 
-//gets comments from datastore
+/** get messages from datastore and display them */
 function getMessages() {
-  fetch('/messages').then(response => response.json()).then((comments) => {
+  var numComments = document.getElementById("num-comments").value;
+  var sortSelection = document.getElementById("sort-selection").value;
+  fetch('/messages?num='+numComments+'&sort='+sortSelection).then(response => response.json()).then((comments) => {
     const commentListElement = document.getElementById('comment-list');
+    document.getElementById("comment-list").innerHTML = "";
     comments.forEach((comment) => {
       commentListElement.appendChild(createCommentElement(comment));
     })
   });
 }
 
-//TODO: fix formatting of comments
+// TODO: fix formatting of comments
 function createCommentElement(comment) {
   const commentElement = document.createElement('li');
   commentElement.className = 'comment';
-
   const bodyElement = document.createElement('span');
   bodyElement.innerText = comment.comment + "\n" + "\n";
 
   const authorElement = document.createElement('span');
   authorElement.innerText = comment.author + "\n";
-
   
   commentElement.appendChild(authorElement);
   commentElement.appendChild(bodyElement);
+  commentElement.style.backgroundColor = comment.color;
   return commentElement;
+}
+
+
+/** deletes all comments */
+function deleteEverything(){
+  const request = new Request('/delete-data', {method: 'POST'});
+  fetch(request).then(response => response.json()).then(() => {
+    getMessages();
+  });
 }
