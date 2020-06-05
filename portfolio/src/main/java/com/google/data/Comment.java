@@ -21,12 +21,14 @@ public final class Comment {
   private final String comment;
   private final String color;
   private final long timestamp;
+  private final String textColor;
 
-  public Comment(long id, String comment, long timestamp, String author, String color) {
+  public Comment(long id, String comment, long timestamp, String author, String color, String textColor) {
     this.id = id;
     this.comment = comment;
     this.timestamp = timestamp;
     this.author = author;
     this.color = color;
+    this.textColor = textColor;
   }
 }

@@ -27,7 +27,7 @@ function addRandomRecommendation() {
   recommendationContainer.innerText = recommendation;
 }
 
-/** get messages from datastore and display them */
+/** Get messages from datastore and display them */
 function getMessages() {
   var numComments = document.getElementById("num-comments").value;
   var sortSelection = document.getElementById("sort-selection").value;
@@ -40,7 +40,7 @@ function getMessages() {
   });
 }
 
-// TODO: fix formatting of comments
+/** Creates one comment element and adds it to the dom */
 function createCommentElement(comment) {
   const commentElement = document.createElement('li');
   commentElement.className = 'comment';
@@ -48,16 +48,23 @@ function createCommentElement(comment) {
   bodyElement.innerText = comment.comment + "\n" + "\n";
 
   const authorElement = document.createElement('span');
-  authorElement.innerText = comment.author + "\n";
-  
+  authorElement.innerText = comment.author + " " + "\n";
+
+  var d = new Date(comment.timestamp);
+  const timeElement = document.createElement('span');
+  timeElement.innerText = d.toDateString();
+  timeElement.style.textAlign = "left";
+
   commentElement.appendChild(authorElement);
   commentElement.appendChild(bodyElement);
+  commentElement.appendChild(timeElement);
+  commentElement.style.color = comment.textColor
   commentElement.style.backgroundColor = comment.color;
   return commentElement;
 }
 
 
-/** deletes all comments */
+/** Deletes all comments */
 function deleteEverything(){
   const request = new Request('/delete-data', {method: 'POST'});
   fetch(request).then(response => response.json()).then(() => {

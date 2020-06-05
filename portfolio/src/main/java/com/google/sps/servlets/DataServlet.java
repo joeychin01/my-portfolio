@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class DataServlet extends HttpServlet {
     long timestamp = System.currentTimeMillis();
     String author = request.getParameter("author-box");
     String color = request.getParameter("favcolor");
+    String textColor = request.getParameter("text-color");
     if(author.length() == 0) {
       author = "Anonymous";
     }
@@ -51,12 +53,13 @@ public class DataServlet extends HttpServlet {
       commentEntity.setProperty("timestamp", timestamp);
       commentEntity.setProperty("author", author);
       commentEntity.setProperty("color", color);
+      commentEntity.setProperty("textColor", textColor);
       datastore.put(commentEntity);
     }
     response.sendRedirect("/index.html");
   }
 
-  /** Function Returns list of comments */
+  /** Function returns list of comments */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment");
@@ -73,19 +76,18 @@ public class DataServlet extends HttpServlet {
       query.addSort("timestamp", SortDirection.DESCENDING);
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
     int numComments = Integer.parseInt(request.getParameter("num"));
+    List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(numComments));
     List<Comment> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-      if(comments.size() <= numComments) {
-        long id = entity.getKey().getId();
-        String text = (String) entity.getProperty("comment");
-        long timestamp = (long) entity.getProperty("timestamp");
-        String author = (String) entity.getProperty("author");
-        String color = (String) entity.getProperty("color");
-        Comment comment = new Comment(id, text, timestamp, author, color);
-        comments.add(comment);
-      }
+    for (Entity entity : results) {
+      long id = entity.getKey().getId();
+      String text = (String) entity.getProperty("comment");
+      long timestamp = (long) entity.getProperty("timestamp");
+      String author = (String) entity.getProperty("author");
+      String color = (String) entity.getProperty("color");
+      String textColor = (String) entity.getProperty("textColor");
+      Comment comment = new Comment(id, text, timestamp, author, color, textColor);
+      comments.add(comment);
     }
     Gson gson = new Gson();
     response.setContentType("application/json;");
