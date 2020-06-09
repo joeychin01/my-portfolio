@@ -8,18 +8,16 @@
   </head>
 
   <body onload="getMessages()"> 
-    <button id = "delete-button">DELETE ALL COMMENTS</button>
     <div id="webheader">
       <a href="/"><img src="/images/my_face.jpeg"></a>
       <h1>Joseph Chinoski's Portfolio</h1>
       <a href="https://www.linkedin.com/in/joseph-chinoski/"><img src="/images/LinkedIn-Logo.png"></a>
     </div>
-
+    
     <div id="login">
       <p id="login-welcome">Welcome!</p>
       <a id="login-link">Login here</a>
     </div>
-
     <div id="content">
       <h1>Welcome to my portfolio!</h1>
       <a href="resume.html">Resume</a>
@@ -32,7 +30,7 @@
           My name is Joseph Chinoski, and I am a rising junior at The University of Michigan (Go Blue!).
           At UMich, I am a Computer Science Major in the College of Engineering.
           Besides coding, I play tennis, read books (especially Stephen King), and play the violin!
-            
+              
         </p>
       </div>
 
@@ -56,23 +54,21 @@
         <h2>Projects</h2>
       </div>
 
-
       <div class = "content">
         <p>
           At CSSI I worked in a group of three in order to build a website to help in daily life.
           Through that project, my group built the website lyric-giraffe.appspot.com, a website that 
           displays lyrics to songs, either through directly searching, or by connecting to a user's 
-         Spotify account.
+        Spotify account.
         </p>
       </div>
-      
+        
       <button onclick="addRandomRecommendation()">Click Here for a random Stephen King Book</button>
       <div id="recommendation-container"></div>
       <br></br>
       <p id="comment-display">Leave a comment:</p>
       <form id="comment-form" action = "/messages" method="POST">
         <input type="text" placeholder="comment" name="comment-box">
-        <input type="text" placeholder="your name" name="author-box">
         <br/><br/>
         <p>Choose a background color for your comment!</p>
         <input type="color" id="favcolor" name="favcolor" value="#ffcb05">

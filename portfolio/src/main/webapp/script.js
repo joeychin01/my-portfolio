@@ -80,7 +80,7 @@ function updateLogin(){
     loginLink = document.getElementById("login-link");
     if(input.login == "true"){
       console.log(input.userEmail + " " + input.logoutUrl);
-      loginWelcome.innerText = "Welcome " + input.userEmail;
+      loginWelcome.innerText = "Welcome\n" + input.userEmail;
       loginLink.href = input.logoutUrl;
       loginLink.innerText = "Logout here";
       document.getElementById("comment-form").style.display = "block";
@@ -92,6 +92,15 @@ function updateLogin(){
       loginLink.innerText = "Login here";
       document.getElementById("comment-form").style.display = "none";
       document.getElementById("comment-display").innerText = "Please sign in to leave a comment";
+    }
+  });
+}
+
+/** Checks if the user has set a nickname */
+function checkNickname() {
+  fetch('/login').then(response => response.json()).then((input) => {
+    if(input.hasNick == "true"){
+      window.location.href = "/index.html";
     }
   });
 }

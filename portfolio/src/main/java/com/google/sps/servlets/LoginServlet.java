@@ -16,6 +16,11 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import java.io.IOException;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
@@ -24,11 +29,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
-/** Servlet controls the comments and datastore */
+/** Servlet returns login URLs */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
   
-  /** Function returns list of comments */
+  /** Function returns login URLs */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
@@ -42,10 +47,21 @@ public class LoginServlet extends HttpServlet {
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
       input.put("logoutUrl", logoutUrl);
       input.put("userEmail", userEmail);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      String id = userService.getCurrentUser().getUserId();
+      Query query = new Query("Nickname")
+        .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+      PreparedQuery results = datastore.prepare(query);
+      Entity entity = results.asSingleEntity();
+      if (entity == null) {
+        input.put("hasNick", "false");
+      } else {
+        input.put("hasNick", "true");
+      }
       
     } else {
       input.put("login", "false");
-      String urlToRedirectToAfterUserLogsIn = "/";
+      String urlToRedirectToAfterUserLogsIn = "/nickname.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
       input.put("loginUrl", loginUrl);
     }

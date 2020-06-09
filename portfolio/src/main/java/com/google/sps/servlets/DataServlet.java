@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -39,19 +41,17 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    UserService userService = UserServiceFactory.getUserService();
     String comment = request.getParameter("comment-box");
     long timestamp = System.currentTimeMillis();
-    String author = request.getParameter("author-box");
     String color = request.getParameter("favcolor");
     String textColor = request.getParameter("text-color");
-    if(author.length() == 0) {
-      author = "Anonymous";
-    }
-    if(comment.length() > 0){
+
+    if(comment.length() > 0 && userService.isUserLoggedIn()){
       Entity commentEntity = new Entity("Comment");
       commentEntity.setProperty("comment", comment);
       commentEntity.setProperty("timestamp", timestamp);
-      commentEntity.setProperty("author", author);
+      commentEntity.setProperty("author", getNickname(userService.getCurrentUser().getUserId()));
       commentEntity.setProperty("color", color);
       commentEntity.setProperty("textColor", textColor);
       datastore.put(commentEntity);
@@ -93,5 +93,19 @@ public class DataServlet extends HttpServlet {
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(gson.toJson(comments));
+  }
+
+  /** Function returns nickname from input user id -- maybe put this as a function in comment servlet? */
+  public String getNickname(String id) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Nickname")
+      .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity entity = results.asSingleEntity();
+    if (entity == null) {
+      return null;
+    }
+    String nickname = (String) entity.getProperty("nickname");
+    return nickname;
   }
 }
