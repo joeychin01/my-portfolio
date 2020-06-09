@@ -50,7 +50,7 @@ body {
 
 .header {
   border: 2px solid #ffcb05;
-  background: #00274C;
+  background: #00274c;
   color: #ffcb05;
   margin-top: 20px;
   margin-left: 10%;
@@ -87,7 +87,11 @@ body {
 }
 
 li {
-  border: 2px solid #00274C;
+  border: 2px solid #00274c;
   margin-bottom: 10px;
   word-wrap: break-word;
+}
+
+#login {
+  text-align: center;
 }

@@ -27,8 +27,9 @@ function addRandomRecommendation() {
   recommendationContainer.innerText = recommendation;
 }
 
-/** get messages from datastore and display them */
+/** Get messages from datastore and display them */
 function getMessages() {
+  updateLogin();
   var numComments = document.getElementById("num-comments").value;
   var sortSelection = document.getElementById("sort-selection").value;
   fetch('/messages?num='+numComments+'&sort='+sortSelection).then(response => response.json()).then((comments) => {
@@ -40,7 +41,7 @@ function getMessages() {
   });
 }
 
-// TODO: fix formatting of comments
+/** Creates one comment element and adds it to the dom */
 function createCommentElement(comment) {
   const commentElement = document.createElement('li');
   commentElement.className = 'comment';
@@ -48,19 +49,49 @@ function createCommentElement(comment) {
   bodyElement.innerText = comment.comment + "\n" + "\n";
 
   const authorElement = document.createElement('span');
-  authorElement.innerText = comment.author + "\n";
-  
+  authorElement.innerText = comment.author + " " + "\n";
+
+  var d = new Date(comment.timestamp);
+  const timeElement = document.createElement('span');
+  timeElement.innerText = d.toDateString();
+  timeElement.style.textAlign = "left";
+
   commentElement.appendChild(authorElement);
   commentElement.appendChild(bodyElement);
+  commentElement.appendChild(timeElement);
+  commentElement.style.color = comment.textColor
   commentElement.style.backgroundColor = comment.color;
   return commentElement;
 }
 
 
-/** deletes all comments */
+/** Deletes all comments */
 function deleteEverything(){
   const request = new Request('/delete-data', {method: 'POST'});
   fetch(request).then(response => response.json()).then(() => {
     getMessages();
+  });
+}
+
+/** Updates page to show login/not login data */
+function updateLogin(){
+  fetch('/login').then(response => response.json()).then((input) => {
+    loginWelcome = document.getElementById("login-welcome");
+    loginLink = document.getElementById("login-link");
+    if(input.login == "true"){
+      console.log(input.userEmail + " " + input.logoutUrl);
+      loginWelcome.innerText = "Welcome " + input.userEmail;
+      loginLink.href = input.logoutUrl;
+      loginLink.innerText = "Logout here";
+      document.getElementById("comment-form").style.display = "block";
+      document.getElementById("comment-display").innerText = "Leave a comment:";
+    }
+    else{
+      loginWelcome.innerText = "Welcome!";
+      loginLink.href = input.loginUrl;
+      loginLink.innerText = "Login here";
+      document.getElementById("comment-form").style.display = "none";
+      document.getElementById("comment-display").innerText = "Please sign in to leave a comment";
+    }
   });
 }

@@ -15,6 +15,11 @@
       <a href="https://www.linkedin.com/in/joseph-chinoski/"><img src="/images/LinkedIn-Logo.png"></a>
     </div>
 
+    <div id="login">
+      <p id="login-welcome">Welcome!</p>
+      <a id="login-link">Login here</a>
+    </div>
+
     <div id="content">
       <h1>Welcome to my portfolio!</h1>
       <a href="resume.html">Resume</a>
@@ -64,14 +69,16 @@
       <button onclick="addRandomRecommendation()">Click Here for a random Stephen King Book</button>
       <div id="recommendation-container"></div>
       <br></br>
-      <form action = "/messages" method="POST">
-        <p>Leave a comment:</p>
+      <p id="comment-display">Leave a comment:</p>
+      <form id="comment-form" action = "/messages" method="POST">
         <input type="text" placeholder="comment" name="comment-box">
         <input type="text" placeholder="your name" name="author-box">
         <br/><br/>
         <p>Choose a background color for your comment!</p>
-        <br></br>
         <input type="color" id="favcolor" name="favcolor" value="#ffcb05">
+        <br></br>
+        <p>Choose a text color for your comment!</p>
+        <input type="color" id="text-color" name="text-color" value="#000000">
         <br></br>
         <input type="submit" />
       </form>
