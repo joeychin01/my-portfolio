@@ -51,18 +51,54 @@ function createCommentElement(comment) {
   const authorElement = document.createElement('span');
   authorElement.innerText = comment.author + " " + "\n";
 
+  const emotionElement = document.createElement('span');
+  let emotion = "";
+  if(comment.sentimentScore > 0.3){
+    emotion = "happy!";
+  } else if(comment.sentimentScore < -0.3) {
+    emotion = "down"
+  } else {
+    emotion = "neutral";
+  }
+  emotionElement.innerText = "Feeling " + emotion + "\n\n";
+
   var d = new Date(comment.timestamp);
   const timeElement = document.createElement('span');
-  timeElement.innerText = d.toDateString();
+  timeElement.innerText = d.toDateString() + "\n";
   timeElement.style.textAlign = "left";
 
+  const deleteButtonElement = document.createElement('button');
+  if(comment.delete){
+    deleteButtonElement.innerText = 'Delete';
+    deleteButtonElement.addEventListener('click', () => {
+      deleteComment(comment);
+
+      // Remove the task from the DOM.
+      commentElement.remove();
+    });
+  }
+
+
   commentElement.appendChild(authorElement);
+  commentElement.appendChild(emotionElement);
   commentElement.appendChild(bodyElement);
   commentElement.appendChild(timeElement);
+  if(comment.delete){
+    commentElement.appendChild(deleteButtonElement);
+  }
   commentElement.style.color = comment.textColor
   commentElement.style.backgroundColor = comment.color;
   return commentElement;
 }
+
+
+/** Tells the server to delete the comment. */
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  fetch('/delete-comment', {method: 'POST', body: params});
+}
+
 
 
 /** Deletes all comments */
@@ -96,7 +132,7 @@ function updateLogin(){
   });
 }
 
-/** Checks if the user has set a nickname */
+/** Checks if the user has set a nickname and redirects home if they have */
 function checkNickname() {
   fetch('/login').then(response => response.json()).then((input) => {
     if(input.hasNick == "true"){

@@ -23,6 +23,9 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.io.IOException;
@@ -46,6 +49,15 @@ public class DataServlet extends HttpServlet {
     long timestamp = System.currentTimeMillis();
     String color = request.getParameter("favcolor");
     String textColor = request.getParameter("text-color");
+    String email = userService.getCurrentUser().getEmail();
+
+    Document doc =
+        Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    double score = (double) sentiment.getScore();
+    languageService.close();
+
 
     if(comment.length() > 0 && userService.isUserLoggedIn()){
       Entity commentEntity = new Entity("Comment");
@@ -54,6 +66,8 @@ public class DataServlet extends HttpServlet {
       commentEntity.setProperty("author", getNickname(userService.getCurrentUser().getUserId()));
       commentEntity.setProperty("color", color);
       commentEntity.setProperty("textColor", textColor);
+      commentEntity.setProperty("sentimentScore", score);
+      commentEntity.setProperty("email", email);
       datastore.put(commentEntity);
     }
     response.sendRedirect("/index.html");
@@ -76,6 +90,7 @@ public class DataServlet extends HttpServlet {
       query.addSort("timestamp", SortDirection.DESCENDING);
     }
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    UserService userService = UserServiceFactory.getUserService();
     int numComments = Integer.parseInt(request.getParameter("num"));
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(numComments));
     List<Comment> comments = new ArrayList<>();
@@ -86,7 +101,10 @@ public class DataServlet extends HttpServlet {
       String author = (String) entity.getProperty("author");
       String color = (String) entity.getProperty("color");
       String textColor = (String) entity.getProperty("textColor");
-      Comment comment = new Comment(id, text, timestamp, author, color, textColor);
+      double sentimentScore = (double) entity.getProperty("sentimentScore");
+      String email = (String) entity.getProperty("email");
+      boolean delete = email.equals(userService.getCurrentUser().getEmail()) || userService.isUserAdmin();
+      Comment comment = new Comment(id, text, timestamp, author, color, textColor, sentimentScore, delete, email);
       comments.add(comment);
     }
     Gson gson = new Gson();
@@ -96,7 +114,7 @@ public class DataServlet extends HttpServlet {
   }
 
   /** Function returns nickname from input user id -- maybe put this as a function in comment servlet? */
-  public String getNickname(String id) {
+  private String getNickname(String id) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Nickname")
       .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
