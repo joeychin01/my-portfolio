@@ -5,6 +5,8 @@
     <title>Joey's Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
   </head>
 
   <body onload="getMessages()"> 
@@ -13,7 +15,7 @@
       <h1>Joseph Chinoski's Portfolio</h1>
       <a href="https://www.linkedin.com/in/joseph-chinoski/"><img src="/images/LinkedIn-Logo.png"></a>
     </div>
-    
+
     <div id="login">
       <p id="login-welcome">Welcome!</p>
       <a id="login-link">Login here</a>
@@ -40,7 +42,9 @@
       <div class = "content">
         <p>
           Over the Coronavirus summer, I am working as a STEP intern at Google, where I am working in a pod 
-          of three people to complete a capstone web development project.
+          of three people to complete a capstone web development project. As well, I also created a portfolio webstite
+          (this very site!) that uses datastore, along with several APIs, including a Machine Learning based sentiment
+          analysis API, to create this site, along with a working comment section.
         </p>
         <p>
           Over the summer in 2019, I participated in CSSI, a Google coding camp that is intended for incoming College 
@@ -80,13 +84,17 @@
         <br/><br/>
         <p>Options:</p>
         <p>Number of comments to display:</p>
-        <input type="number" id="num-comments" name="num-comments" min="1" max="100" value="5">
+        <input type="number" id="num-comments" name="num-comments" min="1" max="100" value="10">
         <br></br>
         <select id="sort-selection" name="sort-selection">
           <option value="time-decreasing">Newest first</option>
           <option value="time-increasing">Oldest first</option>
           <option value="author-az">By author (alphabetical a-z)</option>
           <option value="author-za">By author (alphabetical z-a)</option>
+          <option value="sentiment-increasing">Highest sentiment first</option>
+          <option value="sentiment-decreasing">Lowest sentiment first</option>
+          <option value="color-increasing">By color (brighter first)</option>
+          <option value="color-decreasing">By color (darker first)</option>
         </select>
         <br></br>
         <button onclick="getMessages()">Apply options</button>
