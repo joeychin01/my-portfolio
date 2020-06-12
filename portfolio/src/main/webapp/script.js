@@ -99,8 +99,6 @@ function deleteComment(comment) {
   fetch('/delete-comment', {method: 'POST', body: params});
 }
 
-
-
 /** Deletes all comments */
 function deleteEverything(){
   const request = new Request('/delete-data', {method: 'POST'});

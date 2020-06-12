@@ -26,6 +26,17 @@ public final class Comment {
   private final boolean delete;
   private final String email;
 
+  /** Represents a comment
+    * id - unique id for the comment
+    * comment - the body of the comment
+    * timestamp - the time the comment was sent
+    * author - nickname of the user
+    * color - background color
+    * textcolor - text color
+    * sentimentScore - sentiment analysis score (-1 to 1)
+    * delete - if the comment should have the delete button added to it
+    * email - the email of the user that sent the message
+   */
   public Comment(long id, String comment, long timestamp, String author, String color, String textColor, double sentimentScore, boolean delete, String email) {
     this.id = id;
     this.comment = comment;

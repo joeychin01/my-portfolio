@@ -51,15 +51,14 @@ public class DataServlet extends HttpServlet {
     String textColor = request.getParameter("text-color");
     String email = userService.getCurrentUser().getEmail();
 
-    Document doc =
-        Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
-    LanguageServiceClient languageService = LanguageServiceClient.create();
-    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    double score = (double) sentiment.getScore();
-    languageService.close();
-
-
     if(comment.length() > 0 && userService.isUserLoggedIn()){
+      Document doc =
+          Document.newBuilder().setContent(comment).setType(Document.Type.PLAIN_TEXT).build();
+      LanguageServiceClient languageService = LanguageServiceClient.create();
+      Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+      double score = (double) sentiment.getScore();
+      languageService.close();
+
       Entity commentEntity = new Entity("Comment");
       commentEntity.setProperty("comment", comment);
       commentEntity.setProperty("timestamp", timestamp);
