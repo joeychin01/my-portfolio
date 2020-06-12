@@ -79,13 +79,6 @@ body {
   margin-right: 40px;
 }
 
-#delete-button {
-  background: #00274c;
-  border: none;
-  color: #00274c;
-  margin-left: 200 px;
-}
-
 li {
   border: 2px solid #00274c;
   margin-bottom: 10px;
@@ -93,5 +86,10 @@ li {
 }
 
 #login {
+  background: url("/images/moroccan-flower.png");
+  max-width: 250px;
+  margin: 0 auto;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
   text-align: center;
 }

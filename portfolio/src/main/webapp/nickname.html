@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Joey's Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+
+  <body onload="checkNickname()"> 
+    <div id="webheader">
+      <a href="/"><img src="/images/my_face.jpeg"></a>
+      <h1>Joseph Chinoski's Portfolio</h1>
+      <a href="https://www.linkedin.com/in/joseph-chinoski/"><img src="/images/LinkedIn-Logo.png"></a>
+    </div>
+    
+    <div id="content">
+      <form id="set-nickname" action="/set-nick" method="POST">
+        <p>Please enter a nickname for commenting!</p>
+        <p>This nickname will be associated with your email</p>
+        <p>WARNING: YOUR CHOICE CANNOT BE CHANGED LATER</p>
+        <input type="text" id="nick-choice" name="nick-choice" placeholder="Choose a nickname">
+        <input type="submit">
+      </form>
+    </div>
+  </body>
+</html>
