@@ -85,6 +85,14 @@ public class DataServlet extends HttpServlet {
       query.addSort("author", SortDirection.ASCENDING);
     } else if(sort.equals("author-za")) {
       query.addSort("author", SortDirection.DESCENDING);
+    } else if(sort.equals("sentiment-increasing")) {
+      query.addSort("sentimentScore", SortDirection.DESCENDING);
+    } else if(sort.equals("sentiment-decreasing")) {
+      query.addSort("sentimentScore", SortDirection.ASCENDING);
+    } else if(sort.equals("color-increasing")) {
+      query.addSort("color", SortDirection.DESCENDING);
+    } else if(sort.equals("color-decreasing")) {
+      query.addSort("color", SortDirection.ASCENDING);
     } else {
       query.addSort("timestamp", SortDirection.DESCENDING);
     }
