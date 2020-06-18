@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 
 public final class FindMeetingQuery {
@@ -28,12 +27,50 @@ public final class FindMeetingQuery {
     ArrayList<TimeRange> meetings = new ArrayList<TimeRange>();
     ArrayList<Event> eventTimes = new ArrayList<Event>(events);
     ArrayList<String> requestAttendees = new ArrayList(request.getAttendees());
+    ArrayList<String> requestOptionalAttendees = new ArrayList(request.getOptionalAttendees());
+    requestOptionalAttendees.addAll(requestAttendees);
     Collections.sort(eventTimes, Comparator.comparing(Event::getWhen, TimeRange.ORDER_BY_START));
     long duration = request.getDuration();
     if(duration > 23 * 60 + 59){
       return meetings;
     }
 
+    if(!request.getOptionalAttendees().isEmpty()){
+      ArrayList<TimeRange> optionalbusyTimes = new ArrayList<TimeRange>();
+      for (Event event: eventTimes){
+        if(attendentAttending(event.getAttendees(), requestOptionalAttendees)){
+          if(optionalbusyTimes.isEmpty()){
+            optionalbusyTimes.add(event.getWhen());
+          } else if(optionalbusyTimes.get(optionalbusyTimes.size() - 1).overlaps(event.getWhen())) {
+            optionalbusyTimes.set(optionalbusyTimes.size() - 1, 
+              TimeRange.fromStartEnd(optionalbusyTimes.get(optionalbusyTimes.size() - 1).start(),  
+              Math.max(optionalbusyTimes.get(optionalbusyTimes.size() - 1).end(), event.getWhen().end()), false));
+          } else {
+            optionalbusyTimes.add(event.getWhen());
+          }
+        }
+      }
+      Collections.sort(optionalbusyTimes, TimeRange.ORDER_BY_START);
+
+      if(optionalbusyTimes.get(0).start() > duration){
+        meetings.add(TimeRange.fromStartDuration(0, optionalbusyTimes.get(0).start()));
+      }
+      
+      for(int i = 0; i < optionalbusyTimes.size() - 1; i++){
+        if(optionalbusyTimes.get(i + 1).start() - optionalbusyTimes.get(i).end() >= duration){
+          meetings.add(TimeRange.fromStartEnd(optionalbusyTimes.get(i).end(), optionalbusyTimes.get(i + 1).start(), false));
+        }
+      }
+      
+      if((((23 * 60) + 59) - optionalbusyTimes.get(optionalbusyTimes.size() - 1).end()) >= duration){
+        meetings.add(TimeRange.fromStartEnd(optionalbusyTimes.get(optionalbusyTimes.size() - 1).end(), 24 * 60, false));
+      }
+
+      if(!meetings.isEmpty()){
+        return meetings;
+      }
+    }
+    
     ArrayList<TimeRange> busyTimes = new ArrayList<TimeRange>();
     for (Event event: eventTimes){
       if(attendentAttending(event.getAttendees(), requestAttendees)){
@@ -41,13 +78,15 @@ public final class FindMeetingQuery {
           busyTimes.add(event.getWhen());
         } else if(busyTimes.get(busyTimes.size() - 1).overlaps(event.getWhen())) {
           busyTimes.set(busyTimes.size() - 1, 
-            TimeRange.fromStartEnd(busyTimes.get(busyTimes.size() - 1).start(),  event.getWhen().end(), false));
+            TimeRange.fromStartEnd(busyTimes.get(busyTimes.size() - 1).start(),  
+              Math.max(busyTimes.get(busyTimes.size() - 1).end(), event.getWhen().end()), false));
         } else {
           busyTimes.add(event.getWhen());
         }
       }
     }
 
+    meetings = new ArrayList<TimeRange>();
     if(busyTimes.isEmpty()){
       meetings.add(TimeRange.WHOLE_DAY);
       return meetings;
@@ -70,7 +109,7 @@ public final class FindMeetingQuery {
 
 
 
-  //returns true if an attendee is in the event attendees
+  /* Returns true if an attendee is in the event attendees **/
   private boolean attendentAttending(Set<String> eventAttendees, ArrayList<String> attendees) {
     for(int i = 0; i < attendees.size(); i++){
       if(eventAttendees.contains(attendees.get(i))){
