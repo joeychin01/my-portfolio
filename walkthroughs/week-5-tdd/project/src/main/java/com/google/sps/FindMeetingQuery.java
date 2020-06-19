@@ -28,12 +28,12 @@ public final class FindMeetingQuery {
     ArrayList<Event> eventTimes = new ArrayList<Event>(events);
     ArrayList<String> requestAttendees = new ArrayList(request.getAttendees());
     ArrayList<String> requestOptionalAttendees = new ArrayList(request.getOptionalAttendees());
-    requestOptionalAttendees.addAll(requestAttendees);
-    Collections.sort(eventTimes, Comparator.comparing(Event::getWhen, TimeRange.ORDER_BY_START));
+    requestOptionalAttendees.addAll(request.getAttendees());
     long duration = request.getDuration();
-    if(duration > 23 * 60 + 59){
+    if(duration > TimeRange.WHOLE_DAY.duration()){
       return meetings;
     }
+    Collections.sort(eventTimes, Comparator.comparing(Event::getWhen, TimeRange.ORDER_BY_START));
 
     if(!request.getOptionalAttendees().isEmpty()){
       ArrayList<TimeRange> optionalbusyTimes = new ArrayList<TimeRange>();
@@ -50,9 +50,13 @@ public final class FindMeetingQuery {
           }
         }
       }
-      Collections.sort(optionalbusyTimes, TimeRange.ORDER_BY_START);
 
-      if(optionalbusyTimes.get(0).start() > duration){
+      if(optionalbusyTimes.isEmpty()){
+        meetings.add(TimeRange.WHOLE_DAY);
+        return meetings;
+      }
+
+      if(optionalbusyTimes.get(0).start() >= duration){
         meetings.add(TimeRange.fromStartDuration(0, optionalbusyTimes.get(0).start()));
       }
       
@@ -100,7 +104,7 @@ public final class FindMeetingQuery {
         meetings.add(TimeRange.fromStartEnd(busyTimes.get(i).end(), busyTimes.get(i + 1).start(), false));
       }
     }
-    if((((23 * 60) + 59) - busyTimes.get(busyTimes.size() - 1).end()) >= duration){
+    if(TimeRange.WHOLE_DAY.end() - busyTimes.get(busyTimes.size() - 1).end()) >= duration){
       meetings.add(TimeRange.fromStartEnd(busyTimes.get(busyTimes.size() - 1).end(), 24 * 60, false));
     }
 
